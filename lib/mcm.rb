@@ -1,5 +1,5 @@
 require "mcm/version"
 
-module Mcm
+module MCM
   # Your code goes here...
 end

@@ -5,7 +5,7 @@ require 'mcm/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'mcm'
-  spec.version       = Mcm::VERSION
+  spec.version       = MCM::VERSION
   spec.authors       = ['Shinichi Ishimura']
   spec.email         = ['shiketaudonko41@gmail.com']
 

@@ -1,3 +1,3 @@
-module Mcm
+module MCM
   VERSION = "0.1.0"
 end

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Mcm do
+describe MCM do
   it 'has a version number' do
-    expect(Mcm::VERSION).not_to be nil
+    expect(MCM::VERSION).not_to be nil
   end
 
   it 'does something useful' do
