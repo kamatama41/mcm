@@ -15,14 +15,21 @@ module MCM
       class << self
         def get(name, url, opts = {})
           opts[:lazy] ||= []
-          opts[:has_many] ||= {}
-          opts[:has_one] ||= {}
+          opts[:has_many] ||= []
+          opts[:has_one] ||= []
 
-          (opts[:has_many].keys + opts[:has_one].keys + [:self]).each do |k|
-            opts[:lazy] << k unless opts[:lazy].include?(:self)
+          options = {
+            lazy: ([:self] + opts[:lazy] + opts[:has_many] + opts[:has_one]).uniq
+          }
+          %i(has_many has_one).each do |s|
+            f = opts[s].map{|k| [k, "MCM::Resource::#{k.to_s.singularize.camelize}"] }.flatten
+            options[s] = Hash[*f]
           end
+          _map_call(name, url:url, method: :get, options:options)
+        end
 
-          _map_call(name, url:url, method: :get, options:opts)
+        def translator
+          @translator ||= Translator.new
         end
       end
 
@@ -34,10 +41,6 @@ module MCM
         else
           yield self
         end
-      end
-
-      def self.translator
-        @translator ||= Translator.new
       end
     end
   end
