@@ -1,7 +1,7 @@
 module MCM
   module Resource
    class Root < Base
-     get :index, ''
+     get :find, '', has_many: {groups: Group}
    end
   end
 end

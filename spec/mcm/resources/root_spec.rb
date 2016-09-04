@@ -2,7 +2,10 @@ require 'spec_helper'
 
 describe MCM::Resource::Root do
   it 'gets a root resource' do
-    res = MCM::Resource::Root.index
-    puts res.links
+    root = MCM::Resource::Root.find
+    groups = root.groups
+    groups.each do |g|
+      puts "name:#{g.name}, id:#{g.id}"
+    end
   end
 end
