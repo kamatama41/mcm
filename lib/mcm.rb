@@ -1,5 +1,5 @@
-require "mcm/version"
+require 'mcm/version'
+require 'mcm/resource'
 
-module Mcm
-  # Your code goes here...
+module MCM
 end
