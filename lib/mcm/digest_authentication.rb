@@ -13,8 +13,8 @@ module MCM
       digest_auth.next_nonce
 
       uri = env.url
-      uri.user = URI.encode_www_form_component(ENV['MCM_USER'])
-      uri.password = URI.encode_www_form_component(ENV['MCM_TOKEN'])
+      uri.user = URI.encode_www_form_component(MCM.config.user)
+      uri.password = URI.encode_www_form_component(MCM.config.token)
 
       http = Net::HTTP.new(uri.hostname, uri.port)
       http.use_ssl = true

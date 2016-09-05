@@ -1,4 +1,5 @@
 require 'active_rest_client'
+require 'mcm/configuration'
 require 'mcm/digest_authentication'
 require 'mcm/translator'
 require 'mcm/patches'
