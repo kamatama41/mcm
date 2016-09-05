@@ -19,7 +19,7 @@ module MCM
       http = Net::HTTP.new(uri.hostname, uri.port)
       http.use_ssl = true
 
-      req = Net::HTTP::Get.new(uri)
+      req = "Net::HTTP::#{env.method.to_s.camelize}".constantize.new(uri)
       res = http.request(req)
 
       raise "Unexpected status #{res.code}: #{res.message}" unless res.code.to_s == '401'

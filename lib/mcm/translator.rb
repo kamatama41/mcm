@@ -8,7 +8,7 @@ module MCM
     def replace_hash_keys(object)
       if object.is_a? Hash
         result = {}
-        object.each {|k, v| result[k.underscore] = replace_hash_keys(v)}
+        object.each {|k, v| result[k] = replace_hash_keys(v)}
         handle_links(result)
       elsif object.is_a? Array
         object.map {|e| replace_hash_keys(e)}
@@ -21,7 +21,7 @@ module MCM
       if body['links']
         body['links'].each do |link|
           rel = link['rel'].gsub(/http:\/\/mms\.mongodb\.com\//, '')
-          body[rel.underscore] = link
+          body[rel] = link
         end
       end
       body

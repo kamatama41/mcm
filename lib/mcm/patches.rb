@@ -1,4 +1,74 @@
 module ActiveRestClient
+  class Base
+    class << self
+      def _map_call(name, details)
+        details[:options] = replace_options(details[:options])
+        _calls[name] = {name:name}.merge(details)
+        _calls["lazy_#{name}".to_sym] = {name:name}.merge(details)
+        self.class.send(:define_method, name) do |options={}|
+          _call(name, options)
+        end
+        self.class.send(:define_method, "lazy_#{name}".to_sym) do |options={}|
+          _call("lazy_#{name}", options)
+        end
+      end
+
+      def replace_options(opts)
+        %i(lazy has_many has_one).each do |s|
+          opts[s] ||= []
+          opts[s] = opts[s].map{|e| e.to_s.camelize(:lower).to_sym }
+        end
+
+        options = {
+          lazy: ([:self] + opts[:lazy] + opts[:has_many] + opts[:has_one]).uniq
+        }
+        %i(has_many has_one).each do |s|
+          f = opts[s].map{|k| [k, "MCM::Resource::#{k.to_s.singularize.camelize}"] }.flatten
+          options[s] = Hash[*f]
+        end
+        options
+      end
+
+      def translator
+        @translator ||= MCM::Translator.new
+      end
+
+      def whiny_missing(value = nil)
+        true
+      end
+    end
+
+    def method_missing(name, *args)
+      name = name.to_s.camelize(:lower).to_sym
+      if name.to_s[-1,1] == "="
+        name = name.to_s.chop.to_sym
+        @attributes[name] = args.first
+        @dirty_attributes << name
+      else
+        name_sym = name.to_sym
+        name = name.to_s
+
+        if @attributes.has_key? name_sym
+          @attributes[name_sym]
+        else
+          if name[/^lazy_/] && mapped = self.class._mapped_method(name_sym)
+            raise ValidationFailedException.new unless valid?
+            request = Request.new(mapped, self, args.first)
+            ActiveRestClient::LazyLoader.new(request)
+          elsif mapped = self.class._mapped_method(name_sym)
+            raise ValidationFailedException.new unless valid?
+            request = Request.new(mapped, self, args.first)
+            request.call
+          elsif self.class.whiny_missing
+            raise NoAttributeException.new("Missing attribute #{name_sym}")
+          else
+            nil
+          end
+        end
+      end
+    end
+  end
+
   class LazyAssociationLoader
     def ensure_lazy_loaded
       if @object.nil?
