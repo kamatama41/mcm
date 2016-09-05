@@ -32,16 +32,6 @@ module MCM
           @translator ||= Translator.new
         end
       end
-
-      def each
-        if (results = @attributes[:results])
-          results.each do |value|
-            yield value
-          end
-        else
-          yield self
-        end
-      end
     end
   end
 end

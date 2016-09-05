@@ -10,7 +10,7 @@ describe MCM::Resource::Root do
 
     puts root.groups.to_json
     groups = root.groups.self
-    groups.each do |g|
+    groups.results.each do |g|
       puts "name:#{g.name}, active_agent_count:#{g.active_agent_count}"
     end
   end
