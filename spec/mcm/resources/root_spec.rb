@@ -13,5 +13,9 @@ describe MCM::Resource::Root do
     groups.results.each do |g|
       puts "name:#{g.name}, active_agent_count:#{g.active_agent_count}"
     end
+
+    group = groups.results[3]
+    group = group.self
+    puts group
   end
 end

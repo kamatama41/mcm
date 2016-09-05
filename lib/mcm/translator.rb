@@ -23,7 +23,6 @@ module MCM
           rel = link['rel'].gsub(/http:\/\/mms\.mongodb\.com\//, '')
           body[rel.underscore] = link
         end
-        body.delete('links')
       end
       body
     end
