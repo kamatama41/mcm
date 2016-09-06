@@ -1,6 +1,7 @@
 module MCM
   module Resource
     class AutomationConfig < Base
+      whiny_missing false
       get :find, '/groups/:id/automationConfig'
       put :update, '/groups/:id/automationConfig'
 
