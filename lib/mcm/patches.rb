@@ -34,7 +34,11 @@ module ActiveRestClient
       end
 
       def whiny_missing(value = nil)
-        value ? @whiny_missing = value : @whiny_missing || true
+        if value
+          @whiny_missing = value
+        else
+          @whiny_missing
+        end
       end
     end
 
